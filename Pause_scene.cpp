@@ -1,6 +1,6 @@
-#include "Menu_scene.h"
+#include "Pause_scene.h"
 
-Menu_scene::Menu_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_), selected(0){
+Pause_scene::Pause_scene(const int &width_, const int &height_, RenderWindow &window): Scene(width_, height_), selected(0) {
   font.loadFromFile("Resources/rita.ttf");
   for (int i = 0; i < 3; ++i) {
     text[i].setFont(font);
@@ -8,28 +8,28 @@ Menu_scene::Menu_scene(const int &width_, const int &height_, RenderWindow &wind
     text[i].setPosition(Vector2f(width / 2.5, height / 4.0 * (i + 1)));
   }
   text[selected].setFillColor(selectedColor);
-  text[0].setString("Play");
+  text[0].setString("Resume");
   text[1].setString("Options");
-  text[2].setString("Exit");
-  backgroundTexture.loadFromFile("Resources/backgroundMenu.png");
+  text[2].setString("Menu");
+  backgroundTexture.loadFromFile("Resources/backgroundPause.png");
   backgroundSprite.setTexture(backgroundTexture);
 }
 
-void Menu_scene::MoveUp() {
+void Pause_scene::MoveUp() {
   if (selected >= 1) {
     text[selected--].setFillColor(mainColor);
     text[selected].setFillColor(selectedColor);
   }
 }
 
-void Menu_scene::MoveDown() {
+void Pause_scene::MoveDown() {
   if (selected <= 1) {
     text[selected++].setFillColor(mainColor);
     text[selected].setFillColor(selectedColor);
   }
 }
 
-void Menu_scene::draw(sf::RenderWindow &window, ll &time) {
+void Pause_scene::draw(sf::RenderWindow &window, ll &time) {
   backgroundSprite.setTexture(backgroundTexture);
   window.draw(backgroundSprite);
   for (auto &it: text) {
@@ -38,7 +38,7 @@ void Menu_scene::draw(sf::RenderWindow &window, ll &time) {
   }
 }
 
-void Menu_scene::keyRelease(Keyboard::Key &code) {
+void Pause_scene::keyRelease(Keyboard::Key &code) {
   switch (code) {
     case Keyboard::Up: {
       MoveUp();
@@ -56,7 +56,6 @@ void Menu_scene::keyRelease(Keyboard::Key &code) {
       MoveDown();
       break;
     }
-    default:
-      break;
+    default:break;
   }
 }

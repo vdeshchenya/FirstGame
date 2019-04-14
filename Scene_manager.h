@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Menu_scene.h"
 #include "Game_scene.h"
+#include "Pause_scene.h"
 
 enum class SceneType {
   GAME,
@@ -17,31 +18,19 @@ enum class SceneType {
 class Scene_manager {
  public:
   Scene_manager(const int &width, const int &height, RenderWindow &window)
-      : active_scene(SceneType::GAME), menu_scene(width, height, window), game_scene(width, height, window) {}
-  void change_scene(const SceneType &new_scene_type) {
-    active_scene = new_scene_type;
-  }
+      : active_scene(SceneType::MENU),
+        menu_scene(width, height, window),
+        pause_scene(width, height, window),
+        game_scene(width, height, window) {};
 
-  const SceneType &get_sceneType() {
-    return active_scene;
-  }
+  void change_scene(const SceneType &new_scene_type, RenderWindow &window);
 
-  void draw(sf::RenderWindow &window, ll& time) {
-    switch (active_scene) {
-      case SceneType::MENU: {
-        menu_scene.draw(window, time);
-        break;
-      }
-      case SceneType::GAME: {
-        game_scene.draw(window, time);
-        break;
-      }
-    }
-  }
+  void draw(sf::RenderWindow &window, ll &time);
 
   void keyRelease(Keyboard::Key &code, RenderWindow &window);
 
  private:
+  Pause_scene pause_scene;
   Menu_scene menu_scene;
   Game_scene game_scene;
   SceneType active_scene;

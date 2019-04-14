@@ -20,8 +20,12 @@ void Game::start() {
           sceneManager.keyRelease(event.key.code, window);
           break;
         }
-        default:
+        case Event::Resized: {
+          FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+          window.setView(View(visibleArea));
           break;
+        }
+        default:break;
       }
     }
 

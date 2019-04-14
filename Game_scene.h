@@ -7,16 +7,14 @@
 
 class Game_scene : public Scene {
  public:
-  Game_scene(const int &width, const int &height, RenderWindow& window);
+  Game_scene(const int &width_, const int &height, RenderWindow& window);
   ~Game_scene() = default;
 
   void draw(RenderWindow &window, ll& time) override;
-
   void keyRelease(Keyboard::Key &code);
 
  private:
   MainPlayer player;
-
   int score;
   int lifes;
 
@@ -27,12 +25,9 @@ class Game_scene : public Scene {
   Image hearth_image;
   int SpaceForTop;
   int Widthc, Heightc;
-  int Width, Height;
   int WField, HField;
   int Startx, Starty;
-  int T;
   int TimeForNewBlock;
-  int freqNewBlock;
   int scoreForHit;
   Text text;
   int scoreForStep;

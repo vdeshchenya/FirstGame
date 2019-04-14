@@ -5,7 +5,7 @@
 using namespace sf;
 #include "Point.h"
 
-const int cubeSize = 64;
+const int cubeSize = 80;
 
 typedef unsigned short byte;
 

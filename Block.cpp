@@ -1,6 +1,7 @@
 #include "Block.h"
 
-int NewBlockY = -9 * cubeSize + 40 + 1;
+int SpaceForTop = 30;
+int NewBlockY = -9 * cubeSize + SpaceForTop + 1;
 
 Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY},type_to_color(type_)), type(type_) {}
 
