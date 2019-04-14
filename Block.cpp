@@ -1,25 +1,27 @@
 #include "Block.h"
 
-int NewBlockY = 11*64;
+int NewBlockY = -9 * cubeSize + 40 + 1;
 
-Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY},TypeToRGB(type_)), type(type_) {}
+Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY},type_to_color(type_)), type(type_) {}
 
-void Block::Draw() const{
-  RGB rgb = this->GetColor();
-  glColor3ub(rgb.r, rgb.g, rgb.b);
-  glVertex2i(this->GetLB().x, this->GetLB().y);
-  glVertex2i(this->GetLB().x, this->GetRT().y);
-  glVertex2i(this->GetRT().x, this->GetRT().y);
-  glVertex2i(this->GetRT().x, this->GetLB().y);
+void Block::Draw(RenderWindow& window) const{
+  VertexArray quad(sf::Quads, 4);
+  quad[0].position = sf::Vector2f(GetLB().x, GetLB().y);
+  quad[1].position = sf::Vector2f(GetRT().x, GetLB().y);
+  quad[2].position = sf::Vector2f(GetRT().x, GetRT().y);
+  quad[3].position = sf::Vector2f(GetLB().x, GetRT().y);
+  for(int i = 0; i < 4; ++i)
+    quad[i].color = type_to_color(type);
+  window.draw(quad);
 }
 
-RGB Block::TypeToRGB(const BlockType &type) const {
+Color Block::type_to_color(const BlockType &type) const {
   switch (type) {
-    case BlockType::Red : { return {255, 0, 0}; }
-    case BlockType::Green : { return {0, 255, 0}; }
-    case BlockType::Yellow : { return {255, 255, 0}; }
-    case BlockType::Blue : { return {0, 0, 255}; }
-    case BlockType::Black : { return {0, 0, 0}; }
+    case BlockType::Red : { return Color::Red; }
+    case BlockType::Green : { return Color::Green; }
+    case BlockType::Yellow : { return Color::Yellow; }
+    case BlockType::Blue : { return Color::Blue; }
+    case BlockType::Black : { return Color::Black; }
     case BlockType::Life : { return {}; }
   }
 }

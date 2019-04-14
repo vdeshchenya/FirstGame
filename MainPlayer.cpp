@@ -32,7 +32,7 @@ void MainPlayer::SetMove(const Move& move_) {
   move = move_;
 }
 
-void MainPlayer::DoMove(const int& WField, const int& HField) {
+void MainPlayer::DoMove(const int& WField, const int& HField, const int& SpaceForTop) {
   if (move == Move::LEFT) {
     if (player[0].GetX() > 1 + cubeSize)
       Act({-cubeSize, 0});
@@ -42,36 +42,34 @@ void MainPlayer::DoMove(const int& WField, const int& HField) {
       Act({cubeSize, 0});
   }
   if (GetMove() == Move::UP) {
+    if (player[0].GetY() > cubeSize + SpaceForTop + 60)
+      Act({0, -cubeSize});
+  }
+  if (GetMove() == Move::DOWN) {
     if (player[0].GetY() < (HField - 2) * cubeSize)
       Act({0, cubeSize});
   }
-  if (GetMove() == Move::DOWN) {
-    if (player[0].GetY() > cubeSize)
-      Act({0, -cubeSize});
+  if (GetMove() == Move::ROTATERIGHT) {
+    auto temp = player[1].GetType();
+    player[1].SetType(player[2].GetType());
+    player[2].SetType(player[3].GetType());
+    player[3].SetType(player[4].GetType());
+    player[4].SetType(temp);
   }
   if (GetMove() == Move::ROTATELEFT) {
-    RGB temp = player[1].GetColor();
-    player[1].SetColor(player[2].GetColor());
-    player[2].SetColor(player[3].GetColor());
-    player[3].SetColor(player[4].GetColor());
-    player[4].SetColor(temp);
-  }
-  if (GetMove() == Move::ROTATERIGHT) {
-    RGB temp = player[1].GetColor();
-    player[1].SetColor(player[4].GetColor());
-    player[4].SetColor(player[3].GetColor());
-    player[3].SetColor(player[2].GetColor());
-    player[2].SetColor(temp);
+    auto temp = player[1].GetType();
+    player[1].SetType(player[4].GetType());
+    player[4].SetType(player[3].GetType());
+    player[3].SetType(player[2].GetType());
+    player[2].SetType(temp);
   }
   SetMove(Move::NOTHING);
 }
 
-void MainPlayer::Draw() const {
-  glBegin(GL_QUADS);
+void MainPlayer::Draw(RenderWindow& window) const {
   for (const auto& it: player) {
-    it.Draw();
+    it.Draw(window);
   }
-  glEnd();
 }
 
 vector<BlockPlayer> MainPlayer::GetPlayer() { return player; }

@@ -1,24 +1,24 @@
 #include "BlockPlayer.h"
 
-GLAPI void GLAPIENTRY glColor3ub( GLubyte red, GLubyte green, GLubyte blue );
-
-void BlockPlayer::Draw() const {
-  RGB rgb = this->GetColor();
-  glColor3ub(rgb.r, rgb.g, rgb.b);
-  glVertex2i(this->GetLB().x, this->GetLB().y);
-  glVertex2i(this->GetLB().x, this->GetRT().y);
-  glVertex2i(this->GetRT().x, this->GetRT().y);
-  glVertex2i(this->GetRT().x, this->GetLB().y);
+void BlockPlayer::Draw(RenderWindow& window) const {
+  VertexArray quad(Quads, 4);
+  quad[0].position = Vector2f(GetLB().x, GetLB().y);
+  quad[1].position = Vector2f(GetRT().x, GetLB().y);
+  quad[2].position = Vector2f(GetRT().x, GetRT().y);
+  quad[3].position = Vector2f(GetLB().x, GetRT().y);
+  for(int i = 0; i < 4; ++i)
+    quad[i].color = type_to_color(type);
+  window.draw(quad);
 }
 
-BlockPlayer::BlockPlayer(const Point &point, const MainBlockType &type) : Quad(point, MTypeToRGB(type)) {}
-
-RGB BlockPlayer::MTypeToRGB(const MainBlockType &type) const {
+BlockPlayer::BlockPlayer(const Point &point, const MainBlockType &type_) : Quad(point, type_to_color(type_)),
+                                                                           type(type_) {};
+Color BlockPlayer::type_to_color(const MainBlockType &type) const {
   switch (type) {
-    case MainBlockType::Red : { return {255, 0, 0}; }
-    case MainBlockType::Green : { return {0, 255, 0}; }
-    case MainBlockType::Yellow : { return {255, 255, 0}; }
-    case MainBlockType::Blue : { return {0, 0, 255}; }
-    case MainBlockType::White : { return {255, 255, 255}; }
+    case MainBlockType::White:return Color::White;
+    case MainBlockType::Blue:return Color::Blue;
+    case MainBlockType::Green :return Color::Green;
+    case MainBlockType::Red:return Color::Red;
+    case MainBlockType::Yellow:return Color::Yellow;
   }
 }

@@ -1,18 +1,11 @@
 #include "Quad.h"
 
-//RGB
-bool RGB::operator==(const RGB &rhs) {
-  return ( (this->r == rhs.r) && (this->g == rhs.g) && (this->b == rhs.b));
-}
-
 //Quad
-Quad::Quad(const Point &point, const RGB &rgb) : LB(point), rgb(rgb) {
-  RT = {point.x + cubeSize, point.y + cubeSize};
-}
+Quad::Quad(const Point &point, const Color &color_) : LB(point), RT({point.x + cubeSize, point.y + cubeSize}), color(color_) {}
 
-void Quad::SetColor(const RGB &rgb_) { rgb = rgb_; }
+void Quad::SetColor(const Color &color_) { color = color_; }
 
-RGB Quad::GetColor() const { return rgb; }
+Color Quad::GetColor() const { return color; }
 
 int Quad::GetX() const { return LB.x; }
 
