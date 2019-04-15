@@ -1,21 +1,21 @@
 #include "MainPlayer.h"
 
 MainPlayer::MainPlayer() : move(Move::NOTHING) {
-  player.resize(5);
-  player[0] = {{cubeSize,cubeSize}, MainBlockType::White};
-  player[1] = {{0, cubeSize}, MainBlockType ::Red};
-  player[2] = {{cubeSize, 2*cubeSize}, MainBlockType::Green};
-  player[3] = {{2*cubeSize, cubeSize}, MainBlockType::Yellow};
-  player[4] = {{cubeSize, 0}, MainBlockType::Blue};
+  player.clear();
+  player.push_back({{cubeSize, cubeSize}, MainBlockType::White});
+  player.push_back({{0, cubeSize}, MainBlockType::Red});
+  player.push_back({{cubeSize, 2 * cubeSize}, MainBlockType::Green});
+  player.push_back({{2 * cubeSize, cubeSize}, MainBlockType::Yellow});
+  player.push_back({{cubeSize, 0}, MainBlockType::Blue});
 }
 
 MainPlayer::MainPlayer(const Point &point, const Move &move) : move(move) {
-  player.resize(5);
-  player[0] = {point, MainBlockType::White};
-  player[1] = {{point.x - cubeSize, point.y}, MainBlockType::Red};
-  player[2] = {{point.x, point.y + cubeSize}, MainBlockType::Green};
-  player[3] = {{point.x + cubeSize, point.y}, MainBlockType::Yellow};
-  player[4] = {{point.x, point.y - cubeSize}, MainBlockType::Blue};
+  player.clear();
+  player.push_back({point, MainBlockType::White});
+  player.push_back({{point.x - cubeSize, point.y}, MainBlockType::Red});
+  player.push_back({{point.x, point.y + cubeSize}, MainBlockType::Green});
+  player.push_back({{point.x + cubeSize, point.y}, MainBlockType::Yellow});
+  player.push_back({{point.x, point.y - cubeSize}, MainBlockType::Blue});
 }
 
 void MainPlayer::Act(const Point &vec) {
@@ -28,11 +28,11 @@ Move MainPlayer::GetMove() const {
   return move;
 }
 
-void MainPlayer::SetMove(const Move& move_) {
+void MainPlayer::SetMove(const Move &move_) {
   move = move_;
 }
 
-void MainPlayer::DoMove(const int& WField, const int& HField, const int& SpaceForTop) {
+void MainPlayer::DoMove(const int &WField, const int &HField, const int &SpaceForTop) {
   if (move == Move::LEFT) {
     if (player[0].GetX() > 1 + cubeSize)
       Act({-cubeSize, 0});
@@ -66,10 +66,14 @@ void MainPlayer::DoMove(const int& WField, const int& HField, const int& SpaceFo
   SetMove(Move::NOTHING);
 }
 
-void MainPlayer::Draw(RenderWindow& window) {
-  for (auto& it: player) {
+void MainPlayer::Draw(RenderWindow &window) {
+  for (auto &it: player) {
     it.Draw(window);
   }
 }
 
 vector<BlockPlayer> MainPlayer::GetPlayer() { return player; }
+
+void MainPlayer::Init() {
+  player[0].Init();
+}

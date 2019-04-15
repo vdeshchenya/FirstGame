@@ -13,7 +13,7 @@ class Game {
   Scene_manager sceneManager;
 
  public:
-  Game(const std::string &name_, const int &width_, const int &height_) : name(name_), width(width_), height(height_), sceneManager(width_, height_, window) {}
+  Game(const std::string &name_, const int &width_, const int &height_);
 
   void start();
 };

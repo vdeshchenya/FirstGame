@@ -7,17 +7,10 @@
 class Menu_scene : public Scene {
  public:
   Menu_scene(const int &width, const int &height, RenderWindow &window);
-
-  ~Menu_scene() = default;
-
   void MoveUp();
-
   void MoveDown();
-
-  int GetSelected() const { return selected; }
-
-  void draw(sf::RenderWindow &window, ll& time) override;
-
+  int GetSelected() const;
+  void draw(RenderWindow &window, ll &time) override;
   void keyRelease(Keyboard::Key &code);
 
  private:

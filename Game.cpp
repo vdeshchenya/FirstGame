@@ -1,8 +1,11 @@
 #include <iostream>
 #include "Game.h"
 
+Game::Game(const std::string &name_, const int &width_, const int &height_)
+    : name(name_), width(width_), height(height_), sceneManager(width_, height_, window) {};
+
 void Game::start() {
-  window.create(sf::VideoMode(width, height), name);
+  window.create(VideoMode(width, height), name);
   Clock clock;
   unsigned long long int time = 0;
 

@@ -3,7 +3,7 @@
 int SpaceForTop = 30;
 int NewBlockY = -9 * cubeSize + SpaceForTop + 1;
 
-Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY}, type_to_color(type_)), type(type_) {
+Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY}), type(type_) {
   switch (type) {
     case BlockType::Green: {
       image.loadFromFile("Textures/green.png");
@@ -26,7 +26,7 @@ Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY}, type_t
       break;
     }
     case BlockType::Black: {
-      image.loadFromFile("Textures/green.png");
+      image.loadFromFile("Textures/purple.png");
       break;
     }
   }
@@ -43,17 +43,10 @@ void Block::Draw(RenderWindow &window) {
   window.draw(sprite);
 }
 
-Color Block::type_to_color(const BlockType &type) const {
-  switch (type) {
-    case BlockType::Red : { return Color::Red; }
-    case BlockType::Green : { return Color::Green; }
-    case BlockType::Yellow : { return Color::Yellow; }
-    case BlockType::Blue : { return Color::Blue; }
-    case BlockType::Black : { return Color::Black; }
-    case BlockType::Life : { return {}; }
-  }
-}
-
 void Block::SetType(const BlockType &type_) {
   type = type_;
+}
+
+BlockType Block::GetType() {
+  return type;
 }

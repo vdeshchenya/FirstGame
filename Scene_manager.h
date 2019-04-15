@@ -10,23 +10,15 @@
 enum class SceneType {
   GAME,
   OPTION,
-  EXIT,
   PAUSE,
   MENU
 };
 
 class Scene_manager {
  public:
-  Scene_manager(const int &width, const int &height, RenderWindow &window)
-      : active_scene(SceneType::MENU),
-        menu_scene(width, height, window),
-        pause_scene(width, height, window),
-        game_scene(width, height, window) {};
-
+  Scene_manager(const int &width, const int &height, RenderWindow &window);
   void change_scene(const SceneType &new_scene_type, RenderWindow &window);
-
-  void draw(sf::RenderWindow &window, ll &time);
-
+  void draw(RenderWindow &window, ll &time);
   void keyRelease(Keyboard::Key &code, RenderWindow &window);
 
  private:

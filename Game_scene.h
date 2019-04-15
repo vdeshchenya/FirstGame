@@ -7,10 +7,9 @@
 
 class Game_scene : public Scene {
  public:
-  Game_scene(const int &width_, const int &height, RenderWindow& window);
-  ~Game_scene() = default;
+  Game_scene(const int &width_, const int &height, RenderWindow &window);
 
-  void draw(RenderWindow &window, ll& time) override;
+  void draw(RenderWindow &window, ll &time) override;
   void keyRelease(Keyboard::Key &code);
 
  private:
@@ -23,24 +22,25 @@ class Game_scene : public Scene {
   Texture hearth_texture;
   Sprite hearth_sprite;
   Image hearth_image;
+  Texture textGameOver_texture;
+  Sprite textGameOver_sprite;
+  Image textGameOver_image;
   int SpaceForTop;
-  int Widthc, Heightc;
   int WField, HField;
-  int Startx, Starty;
   int TimeForNewBlock;
+  double K;
   int scoreForHit;
   Text text;
   int scoreForStep;
   List blocks;
 
-  void DrawGameStats(RenderWindow& window);
-  void DrawPlayer(RenderWindow& window);
-  void DrawField(RenderWindow& texture);
-  void DrawBlocks(RenderWindow& window);
+  void DrawGameStats(RenderWindow &window);
+  void DrawPlayer(RenderWindow &window);
+  void DrawField(RenderWindow &texture);
+  void DrawBlocks(RenderWindow &window);
   void GetMove();
   void NewBlock();
   void Contact(Node *block, const BlockPlayer &quad);
-
 };
 
 #endif //GMAE_GAME_SCENE_H

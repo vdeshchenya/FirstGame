@@ -1,11 +1,6 @@
 #include "Quad.h"
 
-//Quad
-Quad::Quad(const Point &point, const Color &color_) : LB(point), RT({point.x + cubeSize, point.y + cubeSize}), color(color_) {}
-
-void Quad::SetColor(const Color &color_) { color = color_; }
-
-Color Quad::GetColor() const { return color; }
+Quad::Quad(const Point &point) : LB(point), RT({point.x + cubeSize, point.y + cubeSize}) {}
 
 int Quad::GetX() const { return LB.x; }
 

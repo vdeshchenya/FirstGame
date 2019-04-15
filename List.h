@@ -3,7 +3,7 @@
 #include "Block.h"
 
 struct Node {
-  Node(const BlockType &type_, const int &x) : data(type_, x), next(nullptr), prev(nullptr) {}
+  Node(const BlockType &type_, const int &x);
   Block data;
   Node *next, *prev;
 };

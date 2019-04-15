@@ -12,20 +12,16 @@ typedef unsigned short byte;
 
 class Quad {
  public:
-  Quad() : color(Color::White), LB({0, 0}), RT({1, 1}) {};
-  Quad(const Point &point, const Color &color_);
-  virtual void SetColor(const Color& color_);
-  Color GetColor() const;
+  Quad(const Point &point);
   int GetX() const;
   int GetY() const;
   Point GetLB() const;
   Point GetRT() const;
-  virtual void Draw(RenderWindow& window) = 0;
+  virtual void Draw(RenderWindow &window) = 0;
   void Act(const Point &vec);
  private:
   Point LB;
   Point RT;
-  Color color;
  protected:
   Image image;
   Texture texture;

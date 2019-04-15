@@ -1,6 +1,7 @@
 #include "Pause_scene.h"
 
-Pause_scene::Pause_scene(const int &width_, const int &height_, RenderWindow &window): Scene(width_, height_), selected(0) {
+Pause_scene::Pause_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_),
+                                                                                        selected(0) {
   font.loadFromFile("Fonts/rita.ttf");
   for (int i = 0; i < 3; ++i) {
     text[i].setFont(font);
@@ -29,7 +30,9 @@ void Pause_scene::MoveDown() {
   }
 }
 
-void Pause_scene::draw(sf::RenderWindow &window, ll &time) {
+int Pause_scene::GetSelected() const { return selected; }
+
+void Pause_scene::draw(RenderWindow &window, ll &time) {
   backgroundSprite.setTexture(backgroundTexture);
   window.draw(backgroundSprite);
   for (auto &it: text) {

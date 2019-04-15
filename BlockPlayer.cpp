@@ -11,8 +11,10 @@ void BlockPlayer::Draw(RenderWindow &window) {
   window.draw(sprite);
 }
 
-BlockPlayer::BlockPlayer(const Point &point, const MainBlockType &type_) : Quad(point, type_to_color(type_)),
-                                                                           type(type_) {
+BlockPlayer::BlockPlayer(const Point &point, const MainBlockType &type_) : Quad(point),
+                                                                           type(type_) {};
+
+void BlockPlayer::Init() {
   image.loadFromFile("Textures/green.png");
   texture.loadFromImage(image);
   textures[MainBlockType::Green] = texture;
@@ -32,14 +34,12 @@ BlockPlayer::BlockPlayer(const Point &point, const MainBlockType &type_) : Quad(
   image.loadFromFile("Textures/white.png");
   texture.loadFromImage(image);
   textures[MainBlockType::White] = texture;
-};
+}
 
-Color BlockPlayer::type_to_color(const MainBlockType &type) const {
-  switch (type) {
-    case MainBlockType::White:return Color::White;
-    case MainBlockType::Blue:return Color::Blue;
-    case MainBlockType::Green :return Color::Green;
-    case MainBlockType::Red:return Color::Red;
-    case MainBlockType::Yellow:return Color::Yellow;
-  }
+void BlockPlayer::SetType(const MainBlockType &type_) {
+  type = type_;
+}
+
+MainBlockType BlockPlayer::GetType() const {
+  return type;
 }

@@ -3,74 +3,58 @@
 #include <vector>
 #include <iostream>
 
-Game_scene::Game_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_) {
+Game_scene::Game_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_),
+                                                                                      K(1),
+                                                                                      SpaceForTop(30),
+                                                                                      lifes(3),
+                                                                                      TimeForNewBlock(0),
+                                                                                      score(0),
+                                                                                      t(0),
+                                                                                      scoreForStep(1),
+                                                                                      scoreForHit(10),
+                                                                                      WField(5),
+                                                                                      HField(9) {
   font.loadFromFile("Fonts/rita.ttf");
   hearth_image.loadFromFile("Images/Hearth.png");
-  hearth_texture.loadFromImage(hearth_image);
-  hearth_sprite.setTexture(hearth_texture);
   backgroundTexture.loadFromFile("Backgrounds/Game.png");
-  backgroundSprite.setTexture(backgroundTexture);
-  SpaceForTop = 30;
-  lifes = 3;
-  TimeForNewBlock = 0;
-  score = 0;
-  t = 0;
-  scoreForHit = 10;
-  scoreForStep = 1;
+  textGameOver_image.loadFromFile("Images/textGameOver.png");
+  hearth_texture.loadFromImage(hearth_image);
+  textGameOver_texture.loadFromImage(textGameOver_image);
+  textGameOver_sprite.setPosition(width / 2.5, height / 3.0);
   blocks.Start = nullptr;
-  Widthc = 5, Heightc = 9;
-  WField = 5, HField = 9;
-  Startx = 1 + WField / 2 * cubeSize, Starty = SpaceForTop + (HField - 2) * cubeSize + 1;
-  player = MainPlayer({Startx, Starty}, Move::NOTHING);
-  width = Widthc * cubeSize + 2, height = Heightc * cubeSize + SpaceForTop + 2;
+  player.Init();
+  player = MainPlayer({1 + WField / 2 * cubeSize, SpaceForTop + (HField - 2) * cubeSize + 1}, Move::NOTHING);
+  width = WField * cubeSize + 2, height = HField * cubeSize + SpaceForTop + 2;
   text.setFillColor(Color::Black);
   text.setPosition(width - 22, -6);
 }
 
 void Game_scene::draw(RenderWindow &window, ll &time) {
-  backgroundTexture.loadFromFile("Backgrounds/Game.png");
   backgroundSprite.setTexture(backgroundTexture);
   window.draw(backgroundSprite);
   if (lifes <= 0) {
-    backdroundImage.loadFromFile("Images/textGameOver.png");
-    backgroundTexture.loadFromImage(backdroundImage);
-    backgroundSprite.setTexture(backgroundTexture);
-    backgroundSprite.setPosition(width / 2.5, height / 3.0);
-    window.draw(backgroundSprite);
-  } else {
-    GetMove();
-    DrawField(window);
-    DrawPlayer(window);
-    DrawBlocks(window);
-    DrawGameStats(window);
-    if (TimeForNewBlock == 3) {
-      NewBlock();
-      TimeForNewBlock = 0;
-    }
-    if (time > 1000000) {
-      score += scoreForStep;
-      time = 0;
-      TimeForNewBlock += 1;
-      if (blocks.Start == nullptr)
-        return;
-      auto node = blocks.Start;
-      while (node->next != nullptr) {
-        node->data.Act({0, cubeSize});
-        if (node->data.GetY() > height) {
-          if (blocks.Start == node) {
-            auto node1 = node->next;
-            delete node;
-            blocks.Start = node1;
-          } else {
-            auto node1 = node->prev, node2 = node->next;
-            delete node;
-            node1->next = node2;
-            node2->prev = node1;
-          }
-        }
-        node = node->next;
-      }
-
+    textGameOver_sprite.setTexture(backgroundTexture);
+    window.draw(textGameOver_sprite);
+    return;
+  }
+  GetMove();
+  DrawField(window);
+  DrawPlayer(window);
+  DrawBlocks(window);
+  DrawGameStats(window);
+  if (TimeForNewBlock == 3) {
+    NewBlock();
+    TimeForNewBlock = 0;
+    K *= 1.1;
+  }
+  if (time > 1000000 / K) {
+    score += scoreForStep;
+    time = 0;
+    TimeForNewBlock += 1;
+    if (blocks.Start == nullptr)
+      return;
+    auto node = blocks.Start;
+    while (node->next != nullptr) {
       node->data.Act({0, cubeSize});
       if (node->data.GetY() > height) {
         if (blocks.Start == node) {
@@ -83,6 +67,21 @@ void Game_scene::draw(RenderWindow &window, ll &time) {
           node1->next = node2;
           node2->prev = node1;
         }
+      }
+      node = node->next;
+    }
+
+    node->data.Act({0, cubeSize});
+    if (node->data.GetY() > height) {
+      if (blocks.Start == node) {
+        auto node1 = node->next;
+        delete node;
+        blocks.Start = node1;
+      } else {
+        auto node1 = node->prev, node2 = node->next;
+        delete node;
+        node1->next = node2;
+        node2->prev = node1;
       }
     }
   }
@@ -183,29 +182,29 @@ void Game_scene::GetMove() {
 
 void Game_scene::DrawField(RenderWindow &window) {
   Vertex line1[] = {
-      sf::Vertex(sf::Vector2f(1.f, 0.f)),
-      sf::Vertex(sf::Vector2f(1.f, HField * cubeSize + SpaceForTop + 2))
+      Vertex(Vector2f(1.f, 0.f)),
+      Vertex(Vector2f(1.f, HField * cubeSize + SpaceForTop + 2))
   };
   Vertex line2[] = {
-      sf::Vertex(sf::Vector2f(WField * cubeSize + 2, 0.f)),
-      sf::Vertex(sf::Vector2f(WField * cubeSize + 2, HField * cubeSize + SpaceForTop + 2))
+      Vertex(Vector2f(WField * cubeSize + 2, 0.f)),
+      Vertex(Vector2f(WField * cubeSize + 2, HField * cubeSize + SpaceForTop + 2))
   };
   Vertex line3[] = {
-      sf::Vertex(sf::Vector2f(0.f, HField * cubeSize + SpaceForTop + 2)),
-      sf::Vertex(sf::Vector2f(WField * cubeSize + 2, HField * cubeSize + SpaceForTop + 2))
+      Vertex(Vector2f(0.f, HField * cubeSize + SpaceForTop + 2)),
+      Vertex(Vector2f(WField * cubeSize + 2, HField * cubeSize + SpaceForTop + 2))
   };
   Vertex line4[] = {
-      sf::Vertex(sf::Vector2f(0.f, SpaceForTop)),
-      sf::Vertex(sf::Vector2f(WField * cubeSize + 2, SpaceForTop))
+      Vertex(Vector2f(0.f, SpaceForTop)),
+      Vertex(Vector2f(WField * cubeSize + 2, SpaceForTop))
   };
   line1[0].color = Color::Black;
-  line1[1].color = Color::Black;//left right bot top
+  line1[1].color = Color::Black;//left
   line2[0].color = Color::Black;
-  line2[1].color = Color::Black;
+  line2[1].color = Color::Black;//right
   line3[0].color = Color::Black;
-  line3[1].color = Color::Black;
+  line3[1].color = Color::Black;//bot
   line4[0].color = Color::Black;
-  line4[1].color = Color::Black;
+  line4[1].color = Color::Black;//top
 
   window.draw(line1, 2, Lines);
   window.draw(line2, 2, Lines);
@@ -247,7 +246,7 @@ void Game_scene::DrawBlocks(RenderWindow &window) {
 void Game_scene::NewBlock() {
   srand(time(nullptr));
   int x = rand() % WField;
-  int type = rand() % 4;
+  int type = rand() % 6;
 
   Node *new_node = new Node(static_cast<BlockType>(type), 1 + x * cubeSize);
   if (blocks.Start == nullptr) {
@@ -262,10 +261,23 @@ void Game_scene::NewBlock() {
 }
 
 void Game_scene::Contact(Node *block, const BlockPlayer &quad) {
-  if (quad.GetColor() == block->data.GetColor()) {
-    score += scoreForHit;
-  } else {
-    --lifes;
+  switch (block->data.GetType()) {
+    case BlockType::Life: {
+      if (lifes < 4)
+        ++lifes;
+      break;
+    }
+    case BlockType::Black: {
+      --lifes;
+      break;
+    }
+    default: {
+      if (static_cast<int>(block->data.GetType()) == static_cast<int>(quad.GetType()))
+        score += scoreForHit;
+      else
+        --lifes;
+      break;
+    }
   }
   if (blocks.Start == block) {
     auto node = block->next;

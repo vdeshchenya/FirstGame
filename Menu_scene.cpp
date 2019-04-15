@@ -1,6 +1,7 @@
 #include "Menu_scene.h"
 
-Menu_scene::Menu_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_), selected(0){
+Menu_scene::Menu_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_),
+                                                                                      selected(0) {
   font.loadFromFile("Fonts/rita.ttf");
   for (int i = 0; i < 3; ++i) {
     text[i].setFont(font);
@@ -29,7 +30,7 @@ void Menu_scene::MoveDown() {
   }
 }
 
-void Menu_scene::draw(sf::RenderWindow &window, ll &time) {
+void Menu_scene::draw(RenderWindow &window, ll &time) {
   backgroundSprite.setTexture(backgroundTexture);
   window.draw(backgroundSprite);
   for (auto &it: text) {
@@ -37,6 +38,8 @@ void Menu_scene::draw(sf::RenderWindow &window, ll &time) {
     window.draw(it);
   }
 }
+
+int Menu_scene::GetSelected() const { return selected; }
 
 void Menu_scene::keyRelease(Keyboard::Key &code) {
   switch (code) {
@@ -56,7 +59,6 @@ void Menu_scene::keyRelease(Keyboard::Key &code) {
       MoveDown();
       break;
     }
-    default:
-      break;
+    default:break;
   }
 }
