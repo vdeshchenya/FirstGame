@@ -66,8 +66,8 @@ void MainPlayer::DoMove(const int& WField, const int& HField, const int& SpaceFo
   SetMove(Move::NOTHING);
 }
 
-void MainPlayer::Draw(RenderWindow& window) const {
-  for (const auto& it: player) {
+void MainPlayer::Draw(RenderWindow& window) {
+  for (auto& it: player) {
     it.Draw(window);
   }
 }

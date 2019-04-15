@@ -3,12 +3,12 @@
 #include <vector>
 #include <iostream>
 
-Game_scene::Game_scene(const int &width_, const int &height_, RenderWindow &window): Scene(width_, height_) {
-  font.loadFromFile("Resources/rita.ttf");
-  hearth_image.loadFromFile("Resources/Hearth.png");
+Game_scene::Game_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_) {
+  font.loadFromFile("Fonts/rita.ttf");
+  hearth_image.loadFromFile("Images/Hearth.png");
   hearth_texture.loadFromImage(hearth_image);
   hearth_sprite.setTexture(hearth_texture);
-  backgroundTexture.loadFromFile("Resources/backgroundGame.png");
+  backgroundTexture.loadFromFile("Backgrounds/Game.png");
   backgroundSprite.setTexture(backgroundTexture);
   SpaceForTop = 30;
   lifes = 3;
@@ -20,7 +20,7 @@ Game_scene::Game_scene(const int &width_, const int &height_, RenderWindow &wind
   blocks.Start = nullptr;
   Widthc = 5, Heightc = 9;
   WField = 5, HField = 9;
-  Startx = 1 + WField/2 * cubeSize, Starty = SpaceForTop + (HField - 2)*cubeSize + 1;
+  Startx = 1 + WField / 2 * cubeSize, Starty = SpaceForTop + (HField - 2) * cubeSize + 1;
   player = MainPlayer({Startx, Starty}, Move::NOTHING);
   width = Widthc * cubeSize + 2, height = Heightc * cubeSize + SpaceForTop + 2;
   text.setFillColor(Color::Black);
@@ -28,26 +28,49 @@ Game_scene::Game_scene(const int &width_, const int &height_, RenderWindow &wind
 }
 
 void Game_scene::draw(RenderWindow &window, ll &time) {
-  GetMove();
-  backgroundTexture.loadFromFile("Resources/backgroundGame.png");
+  backgroundTexture.loadFromFile("Backgrounds/Game.png");
   backgroundSprite.setTexture(backgroundTexture);
   window.draw(backgroundSprite);
-  DrawField(window);
-  DrawPlayer(window);
-  DrawBlocks(window);
-  DrawGameStats(window);
-  if (TimeForNewBlock == 3) {
-    NewBlock();
-    TimeForNewBlock = 0;
-  }
-  if (time > 1000000) {
-    score += scoreForStep;
-    time = 0;
-    TimeForNewBlock += 1;
-    if (blocks.Start == nullptr)
-      return;
-    auto node = blocks.Start;
-    while (node->next != nullptr) {
+  if (lifes <= 0) {
+    backdroundImage.loadFromFile("Images/textGameOver.png");
+    backgroundTexture.loadFromImage(backdroundImage);
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setPosition(width / 2.5, height / 3.0);
+    window.draw(backgroundSprite);
+  } else {
+    GetMove();
+    DrawField(window);
+    DrawPlayer(window);
+    DrawBlocks(window);
+    DrawGameStats(window);
+    if (TimeForNewBlock == 3) {
+      NewBlock();
+      TimeForNewBlock = 0;
+    }
+    if (time > 1000000) {
+      score += scoreForStep;
+      time = 0;
+      TimeForNewBlock += 1;
+      if (blocks.Start == nullptr)
+        return;
+      auto node = blocks.Start;
+      while (node->next != nullptr) {
+        node->data.Act({0, cubeSize});
+        if (node->data.GetY() > height) {
+          if (blocks.Start == node) {
+            auto node1 = node->next;
+            delete node;
+            blocks.Start = node1;
+          } else {
+            auto node1 = node->prev, node2 = node->next;
+            delete node;
+            node1->next = node2;
+            node2->prev = node1;
+          }
+        }
+        node = node->next;
+      }
+
       node->data.Act({0, cubeSize});
       if (node->data.GetY() > height) {
         if (blocks.Start == node) {
@@ -60,21 +83,6 @@ void Game_scene::draw(RenderWindow &window, ll &time) {
           node1->next = node2;
           node2->prev = node1;
         }
-      }
-      node = node->next;
-    }
-
-    node->data.Act({0, cubeSize});
-    if (node->data.GetY() > height) {
-      if (blocks.Start == node) {
-        auto node1 = node->next;
-        delete node;
-        blocks.Start = node1;
-      } else {
-        auto node1 = node->prev, node2 = node->next;
-        delete node;
-        node1->next = node2;
-        node2->prev = node1;
       }
     }
   }

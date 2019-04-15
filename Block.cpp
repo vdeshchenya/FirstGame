@@ -3,17 +3,44 @@
 int SpaceForTop = 30;
 int NewBlockY = -9 * cubeSize + SpaceForTop + 1;
 
-Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY},type_to_color(type_)), type(type_) {}
+Block::Block(const BlockType &type_, const int &x) : Quad({x, NewBlockY}, type_to_color(type_)), type(type_) {
+  switch (type) {
+    case BlockType::Green: {
+      image.loadFromFile("Textures/green.png");
+      break;
+    }
+    case BlockType::Red: {
+      image.loadFromFile("Textures/red.png");
+      break;
+    }
+    case BlockType::Yellow: {
+      image.loadFromFile("Textures/yellow.png");
+      break;
+    }
+    case BlockType::Blue: {
+      image.loadFromFile("Textures/blue.png");
+      break;
+    }
+    case BlockType::Life: {
+      image.loadFromFile("Textures/green.png");
+      break;
+    }
+    case BlockType::Black: {
+      image.loadFromFile("Textures/green.png");
+      break;
+    }
+  }
+  texture.loadFromImage(image);
+  sprite.setTexture(texture);
+}
 
-void Block::Draw(RenderWindow& window) const{
-  VertexArray quad(sf::Quads, 4);
-  quad[0].position = sf::Vector2f(GetLB().x, GetLB().y);
-  quad[1].position = sf::Vector2f(GetRT().x, GetLB().y);
-  quad[2].position = sf::Vector2f(GetRT().x, GetRT().y);
-  quad[3].position = sf::Vector2f(GetLB().x, GetRT().y);
-  for(int i = 0; i < 4; ++i)
-    quad[i].color = type_to_color(type);
-  window.draw(quad);
+void Block::Draw(RenderWindow &window) {
+  sprite.setTexture(texture);
+  sprite.setPosition(GetLB().x, GetLB().y);
+  sprite.setScale(
+      CubeSize.x / sprite.getLocalBounds().width,
+      CubeSize.y / sprite.getLocalBounds().height);
+  window.draw(sprite);
 }
 
 Color Block::type_to_color(const BlockType &type) const {

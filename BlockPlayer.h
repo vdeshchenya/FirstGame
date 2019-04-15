@@ -2,6 +2,7 @@
 #ifndef GMAE__BLOCKPLAYER_H_
 #define GMAE__BLOCKPLAYER_H_
 #include "Quad.h"
+#include <map>
 
 enum class MainBlockType {
   Red,
@@ -15,7 +16,7 @@ class BlockPlayer : public Quad {
  public:
   BlockPlayer() = default;
   BlockPlayer(const Point &point, const MainBlockType &type);
-  void Draw(RenderWindow& window) const override;
+  void Draw(RenderWindow& window) override;
   MainBlockType GetType() { return type; }
   Color GetColor() const {return type_to_color(type);}
   void SetType(const MainBlockType& type_) { type = type_; }

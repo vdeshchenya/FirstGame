@@ -15,7 +15,7 @@ enum class BlockType {
 class Block : public Quad {
  public:
   Block(const BlockType &type_, const int &x);
-  void Draw(RenderWindow& window) const override;
+  void Draw(RenderWindow& window) override;
   void SetType(const BlockType &type);
  private:
   BlockType type;

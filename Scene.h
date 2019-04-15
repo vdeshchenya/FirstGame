@@ -17,6 +17,7 @@ class Scene {
   virtual void draw(sf::RenderWindow &window, ll& time) = 0;
   virtual Vector2u getSize() const;
  protected:
+  Image backdroundImage;
   Sprite backgroundSprite;
   Texture backgroundTexture;
   Font font;

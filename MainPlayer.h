@@ -24,7 +24,7 @@ struct MainPlayer {
   Move GetMove() const;
   void SetMove(const Move& move);
   void DoMove(const int& WField, const int& HField, const int& SpaceForTop);
-  void Draw(RenderWindow& window) const;
+  void Draw(RenderWindow& window);
   vector<BlockPlayer> GetPlayer();
 
  private:

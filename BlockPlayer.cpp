@@ -1,18 +1,39 @@
 #include "BlockPlayer.h"
 
-void BlockPlayer::Draw(RenderWindow& window) const {
-  VertexArray quad(Quads, 4);
-  quad[0].position = Vector2f(GetLB().x, GetLB().y);
-  quad[1].position = Vector2f(GetRT().x, GetLB().y);
-  quad[2].position = Vector2f(GetRT().x, GetRT().y);
-  quad[3].position = Vector2f(GetLB().x, GetRT().y);
-  for(int i = 0; i < 4; ++i)
-    quad[i].color = type_to_color(type);
-  window.draw(quad);
+std::map<MainBlockType, Texture> textures;
+
+void BlockPlayer::Draw(RenderWindow &window) {
+  sprite.setTexture(textures[type]);
+  sprite.setPosition(GetLB().x, GetLB().y);
+  sprite.setScale(
+      CubeSize.x / sprite.getLocalBounds().width,
+      CubeSize.y / sprite.getLocalBounds().height);
+  window.draw(sprite);
 }
 
 BlockPlayer::BlockPlayer(const Point &point, const MainBlockType &type_) : Quad(point, type_to_color(type_)),
-                                                                           type(type_) {};
+                                                                           type(type_) {
+  image.loadFromFile("Textures/green.png");
+  texture.loadFromImage(image);
+  textures[MainBlockType::Green] = texture;
+
+  image.loadFromFile("Textures/red.png");
+  texture.loadFromImage(image);
+  textures[MainBlockType::Red] = texture;
+
+  image.loadFromFile("Textures/blue.png");
+  texture.loadFromImage(image);
+  textures[MainBlockType::Blue] = texture;
+
+  image.loadFromFile("Textures/yellow.png");
+  texture.loadFromImage(image);
+  textures[MainBlockType::Yellow] = texture;
+
+  image.loadFromFile("Textures/white.png");
+  texture.loadFromImage(image);
+  textures[MainBlockType::White] = texture;
+};
+
 Color BlockPlayer::type_to_color(const MainBlockType &type) const {
   switch (type) {
     case MainBlockType::White:return Color::White;

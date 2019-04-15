@@ -6,6 +6,7 @@ using namespace sf;
 #include "Point.h"
 
 const int cubeSize = 80;
+const Vector2f CubeSize(cubeSize, cubeSize);
 
 typedef unsigned short byte;
 
@@ -19,12 +20,16 @@ class Quad {
   int GetY() const;
   Point GetLB() const;
   Point GetRT() const;
-  virtual void Draw(RenderWindow& window) const = 0;
+  virtual void Draw(RenderWindow& window) = 0;
   void Act(const Point &vec);
  private:
   Point LB;
   Point RT;
   Color color;
+ protected:
+  Image image;
+  Texture texture;
+  Sprite sprite;
 };
 
 bool IfContact(const Quad &quad1, const Quad &quad2);

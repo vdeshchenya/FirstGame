@@ -1,7 +1,7 @@
 #include "Pause_scene.h"
 
 Pause_scene::Pause_scene(const int &width_, const int &height_, RenderWindow &window): Scene(width_, height_), selected(0) {
-  font.loadFromFile("Resources/rita.ttf");
+  font.loadFromFile("Fonts/rita.ttf");
   for (int i = 0; i < 3; ++i) {
     text[i].setFont(font);
     text[i].setFillColor(mainColor);
@@ -11,7 +11,7 @@ Pause_scene::Pause_scene(const int &width_, const int &height_, RenderWindow &wi
   text[0].setString("Resume");
   text[1].setString("Options");
   text[2].setString("Menu");
-  backgroundTexture.loadFromFile("Resources/backgroundPause.png");
+  backgroundTexture.loadFromFile("Backgrounds/Pause.png");
   backgroundSprite.setTexture(backgroundTexture);
 }
 

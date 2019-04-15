@@ -1,7 +1,7 @@
 #include "Menu_scene.h"
 
 Menu_scene::Menu_scene(const int &width_, const int &height_, RenderWindow &window) : Scene(width_, height_), selected(0){
-  font.loadFromFile("Resources/rita.ttf");
+  font.loadFromFile("Fonts/rita.ttf");
   for (int i = 0; i < 3; ++i) {
     text[i].setFont(font);
     text[i].setFillColor(mainColor);
@@ -11,7 +11,7 @@ Menu_scene::Menu_scene(const int &width_, const int &height_, RenderWindow &wind
   text[0].setString("Play");
   text[1].setString("Options");
   text[2].setString("Exit");
-  backgroundTexture.loadFromFile("Resources/backgroundMenu.png");
+  backgroundTexture.loadFromFile("Backgrounds/Menu.png");
   backgroundSprite.setTexture(backgroundTexture);
 }
 
